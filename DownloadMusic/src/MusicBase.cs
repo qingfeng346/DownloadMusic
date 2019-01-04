@@ -6,7 +6,8 @@ using Scorpio.Commons;
 using System.IO;
 using System.Drawing;
 
-public class MusicBase {
+public class MusicBase
+{
     private List<string> _Singer = new List<string>();
     /// <summary>
     /// 歌曲ID, 不同音乐平台的ID可能相同
@@ -34,19 +35,22 @@ public class MusicBase {
     public string Mp3Url { get; protected set; }
 
     private string SavePath = "";
-    protected virtual async Task ParseInfo(string id, string path) {
+    protected virtual async Task ParseInfo(string id, string path)
+    {
         await Task.Yield();
     }
-    public async Task Download(string id, string path) {
+    public async Task Download(string id, string path)
+    {
         ID = id;
         SavePath = path;
         await ParseInfo(id, path);
         await DownloadFile();
     }
-    async Task DownloadFile() {
+    async Task DownloadFile()
+    {
         FileUtil.CreateDirectory(SavePath);
         Logger.info("解析完成,开始下载 id:{0} 名字:{1}  歌手:{2}  专辑:{3}", ID, Name, Singer.GetValue(), Album);
-        var fileName = $"{Singer.GetValue()}-{Name}.mp3";
+        var fileName = $"{Singer.GetValue()} - {Name}.mp3";
         var filePath = Path.Combine(SavePath, fileName);
         await HttpUtil.Download(Mp3Url, filePath);
         Logger.info("下载音频文件完成,文件大小:{1}", fileName, Util.GetMemory(new FileInfo(filePath).Length));
@@ -54,8 +58,9 @@ public class MusicBase {
         file.Tag.Title = Name;
         file.Tag.Performers = Singer.ToArray();
         file.Tag.Album = Album;
-        if (!string.IsNullOrEmpty(CoverUrl)) {
-            var imageName = $"{Singer.GetValue()}-{Name}.jpg";
+        if (!string.IsNullOrEmpty(CoverUrl))
+        {
+            var imageName = $"{Singer.GetValue()} - {Name}.jpg";
             var imagePath = Path.Combine(SavePath, imageName);
             Logger.info("正在下载封面图片...");
             await HttpUtil.Download(CoverUrl, imagePath);
@@ -66,12 +71,16 @@ public class MusicBase {
         file.Save();
         Logger.info("写入封面完成 文件名:{0}  文件大小:{1}", fileName, Util.GetMemory(new FileInfo(filePath).Length));
     }
-    private void ResizeImage(string filePath, int size) {
-        using (var bitmap = new Bitmap(size, size)) {
-            using (var image = Image.FromFile(filePath)) {
+    private void ResizeImage(string filePath, int size)
+    {
+        using (var bitmap = new Bitmap(size, size))
+        {
+            using (var image = Image.FromFile(filePath))
+            {
                 int sourceWidth = image.Width;
                 int sourceHeight = image.Height;
-                using (var graphics = Graphics.FromImage(bitmap)) {
+                using (var graphics = Graphics.FromImage(bitmap))
+                {
                     graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                     graphics.DrawImage(image, 0, 0, size, size);
                 }
