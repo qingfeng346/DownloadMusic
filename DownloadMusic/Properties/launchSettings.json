@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DownloadMusic": {
+      "commandName": "Project",
+      "commandLineArgs": "-id 438658"
+    }
+  }
+}
