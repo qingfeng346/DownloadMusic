@@ -26,7 +26,7 @@ namespace DownloadMusic {
                 var command = CommandLine.Parse(args);
                 var ids = command.GetValue("-id");
                 var path = command.GetValue("-path");
-                var type = command.GetValue("-type");
+                var type = command.GetValueDefault("-type", "");
                 if (string.IsNullOrWhiteSpace(ids)) {
                     throw new Exception("请添加id");
                 }
