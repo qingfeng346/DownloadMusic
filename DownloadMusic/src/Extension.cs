@@ -14,4 +14,10 @@ public static class Extension {
     public static string GetValue(this List<string> value) {
         return string.Join("&", value);
     }
+    public static string XMLEncode(this string str) {
+        return str.Replace("=", "$等于$").Replace("&", "$并且$");
+    }
+    public static string XMLDecode(this string str) {
+        return str.Replace("$等于$", "=").Replace("$并且$", "&");
+    }
 }

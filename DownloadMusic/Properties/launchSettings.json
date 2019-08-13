@@ -2,7 +2,7 @@
   "profiles": {
     "DownloadMusic": {
       "commandName": "Project",
-      "commandLineArgs": "-id 438658"
+      "commandLineArgs": "-type kuwo -id 36878203"
     }
   }
 }
