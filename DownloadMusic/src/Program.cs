@@ -31,17 +31,15 @@ namespace DownloadMusic {
                     throw new Exception("请添加id");
                 }
                 path = System.IO.Path.Combine(Environment.CurrentDirectory, path ?? "");
-                var t = Task.Run(async () => {
-                    var strs = ids.Split(",");
-                    foreach (var id in strs) {
-                        if (type == "kuwo") {
-                            await new MusicKuwo().Download(id, path);
-                        } else {
-                            await new MusicCloud().Download(id, path);
+                Task.Run(async () => {
+                    foreach (var id in ids.Split(",")) {
+                        try {
+                            await MusicFactory.Create(type).Download(id, path);
+                        } catch (Exception e) {
+                            Logger.error($"下载 {id} 失败 : " + e.ToString());
                         }
                     }
-                });
-                t.Wait();
+                }).Wait();
             } catch (Exception e) {
                 Logger.error("Error : " + e.ToString());
             }
