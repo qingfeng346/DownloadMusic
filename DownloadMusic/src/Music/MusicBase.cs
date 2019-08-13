@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Scorpio.Commons;
 using System;
 using System.IO;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.PixelFormats;
 public class MusicFactory {
     public static MusicBase Create(string type) {
         switch (type.ToLower()) {
@@ -68,16 +70,22 @@ public class MusicBase {
     }
     //重置封面大小
     void ResizeImage(string filePath, int size) {
-        using (var bitmap = new Bitmap(size, size)) {
-            using (var image = Image.FromFile(filePath)) {
-                int sourceWidth = image.Width;
-                int sourceHeight = image.Height;
-                using (var graphics = Graphics.FromImage(bitmap)) {
-                    graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                    graphics.DrawImage(image, 0, 0, size, size);
-                }
-            }
-            bitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+        using (Image<Rgba32> image = Image.Load(filePath)) {
+            image.Mutate(x => x
+                .Resize(size, size)
+                .Grayscale());
+            image.Save(filePath); // Automatic encoder selected based on extension.
         }
+        // using (var bitmap = new Bitmap(size, size)) {
+        //     using (var image = Image.FromFile(filePath)) {
+        //         int sourceWidth = image.Width;
+        //         int sourceHeight = image.Height;
+        //         using (var graphics = Graphics.FromImage(bitmap)) {
+        //             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        //             graphics.DrawImage(image, 0, 0, size, size);
+        //         }
+        //     }
+        //     bitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+        // }
     }
 }
