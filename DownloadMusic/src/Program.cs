@@ -36,7 +36,7 @@ namespace DownloadMusic {
                         try {
                             await MusicFactory.Create(type).Download(id, path);
                         } catch (Exception e) {
-                            Logger.error($"下载 {id} 失败 : " + e.ToString());
+                            Logger.error($"下载 {id} 失败 : {e.ToString()}");
                         }
                     }
                 }).Wait();

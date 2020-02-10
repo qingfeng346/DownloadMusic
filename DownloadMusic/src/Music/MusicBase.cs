@@ -48,7 +48,9 @@ public class MusicBase {
                 Logger.info($"尝试下载文件 : {mp3Url}");
                 await HttpUtil.Download(mp3Url, filePath);
                 break;
-            } catch (Exception) { }
+            } catch (Exception e) {
+                Logger.info($"下载文件 {mp3Url} 失败 : {e.Message}");
+            }
         }
         if (!File.Exists(filePath)) { throw new Exception("音频文件下载失败"); }
         Logger.info("下载音频文件完成,文件大小:{1}", fileName, Util.GetMemory(new FileInfo(filePath).Length));
@@ -76,16 +78,5 @@ public class MusicBase {
                 .Grayscale());
             image.Save(filePath); // Automatic encoder selected based on extension.
         }
-        // using (var bitmap = new Bitmap(size, size)) {
-        //     using (var image = Image.FromFile(filePath)) {
-        //         int sourceWidth = image.Width;
-        //         int sourceHeight = image.Height;
-        //         using (var graphics = Graphics.FromImage(bitmap)) {
-        //             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-        //             graphics.DrawImage(image, 0, 0, size, size);
-        //         }
-        //     }
-        //     bitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
-        // }
     }
 }
